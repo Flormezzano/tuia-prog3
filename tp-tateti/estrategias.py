@@ -31,6 +31,29 @@ def estrategia_aleatoria(tateti: Tateti, estado: List[List[str]]) -> Tuple[int, 
     
     return random.choice(acciones_disponibles)
 
+
+def minimax_max(tateti: Tateti, estado: List[List[str]]) -> float:
+    if tateti.test_terminal(estado):
+        return tateti.utilidad(estado, JUGADOR_MAX)
+    valor_max = float('-inf')
+
+    for action in tateti.acciones(estado):
+        new_state = tateti.resultado(estado, action)
+        valor_max = max(valor_max, minimax_min(tateti, new_state))
+
+    return valor_max
+
+def minimax_min(tateti: Tateti, estado: List[List[str]]) -> float:
+    if tateti.test_terminal(estado):
+        return tateti.utilidad(estado, JUGADOR_MAX)
+    valor_min = float('+inf')
+
+    for action in tateti.acciones(estado):
+        new_state = tateti.resultado(estado, action)
+        valor_min = min(valor_min, minimax_max(tateti, new_state))
+
+    return valor_min
+
 def estrategia_minimax(tateti: Tateti, estado: List[List[str]]) -> Tuple[int, int]:
     """
     Estrategia minimax: elige la mejor acción usando el algoritmo minimax.
@@ -45,12 +68,31 @@ def estrategia_minimax(tateti: Tateti, estado: List[List[str]]) -> Tuple[int, in
     Raises:
         NotImplementedError: Hasta que el alumno implemente el algoritmo
     """
-    # TODO: Implementar algoritmo minimax
 
-    # INSTRUCCIONES:
-    # 1. Eliminar la línea 'raise NotImplementedError...' de abajo
-    # 2. Implementar el algoritmo minimax aquí
-    # 3. La función debe retornar una tupla (fila, columna) con la mejor jugada
+    if tateti.jugador(estado) == JUGADOR_MAX:
+        sucs = {}
+        for action in tateti.acciones(estado): 
+            new_state = tateti.resultado(estado, action)
+            sucs [action] = minimax_min(tateti, new_state)
+        
+        valor_max = max(sucs.values())
+        for suc in sucs.keys():
+            if sucs[suc] == valor_max:
+                return suc
+    
+    if tateti.jugador(estado) == JUGADOR_MIN:
+        sucs = {}
+        for action in tateti.acciones(estado):
+            new_state = tateti.resultado(estado, action)
+            sucs[action] = minimax_max(tateti, new_state)
+
+        valor_min = min(sucs.values())
+        for suc in sucs.keys():
+            if sucs[suc] == valor_min:
+                return suc
+    
+
+
 
     raise NotImplementedError(
         "\n" + "="*60 +
