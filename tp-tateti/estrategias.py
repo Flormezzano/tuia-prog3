@@ -58,32 +58,35 @@ def estrategia_minimax(tateti: Tateti, estado: List[List[str]]) -> Tuple[int, in
     """
     Estrategia minimax: elige la mejor acción usando el algoritmo minimax.
     
-    Args:
+     Args:
         tateti: Instancia de la clase Tateti
         estado: Estado actual del tablero
         
     Returns:
         Tuple[int, int]: Acción elegida (fila, columna)
-        
-    Raises:
-        NotImplementedError: Hasta que el alumno implemente el algoritmo
     """
-
-    if tateti.jugador(estado) == JUGADOR_MAX:
-        sucs = {}
-        for action in tateti.acciones(estado): 
-            new_state = tateti.resultado(estado, action)
-            sucs [action] = minimax_min(tateti, new_state)
-        
-        return max(sucs, key=sucs.get)
+    # 1. Obtenemos quién juega (MAX o MIN)
+    jugador_actual = tateti.jugador(estado)
+    acciones = tateti.acciones(estado)
     
-    if tateti.jugador(estado) == JUGADOR_MIN:
-        sucs = {}
-        for action in tateti.acciones(estado):
+    if not acciones:
+        raise ValueError("No hay acciones disponibles")
+
+    sucs = {}
+    
+    # 2. Evaluamos cada acción posible
+    if jugador_actual == JUGADOR_MAX:
+        for action in acciones:
+            new_state = tateti.resultado(estado, action)
+            sucs[action] = minimax_min(tateti, new_state)
+        # Buscamos la acción que da el valor máximo
+        return min(sucs, key=lambda k: sucs[k])
+    
+    else:  # Es el turno de JUGADOR_MIN
+        for action in acciones:
             new_state = tateti.resultado(estado, action)
             sucs[action] = minimax_max(tateti, new_state)
-
-        return min(sucs, key=sucs.get)
-    
+        # Buscamos la acción que da el valor mínimo
+        return min(sucs, key=lambda k: sucs[k])
 
 
