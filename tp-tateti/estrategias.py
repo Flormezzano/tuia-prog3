@@ -65,7 +65,6 @@ def estrategia_minimax(tateti: Tateti, estado: List[List[str]]) -> Tuple[int, in
     Returns:
         Tuple[int, int]: Acción elegida (fila, columna)
     """
-    # 1. Obtenemos quién juega (MAX o MIN)
     jugador_actual = tateti.jugador(estado)
     acciones = tateti.acciones(estado)
     
@@ -74,19 +73,16 @@ def estrategia_minimax(tateti: Tateti, estado: List[List[str]]) -> Tuple[int, in
 
     sucs = {}
     
-    # 2. Evaluamos cada acción posible
     if jugador_actual == JUGADOR_MAX:
         for action in acciones:
             new_state = tateti.resultado(estado, action)
             sucs[action] = minimax_min(tateti, new_state)
-        # Buscamos la acción que da el valor máximo
         return min(sucs, key=lambda k: sucs[k])
     
-    else:  # Es el turno de JUGADOR_MIN
+    else:
         for action in acciones:
             new_state = tateti.resultado(estado, action)
             sucs[action] = minimax_max(tateti, new_state)
-        # Buscamos la acción que da el valor mínimo
         return min(sucs, key=lambda k: sucs[k])
 
 
