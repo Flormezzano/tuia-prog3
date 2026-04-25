@@ -31,35 +31,31 @@ class GreedyBestFirstSearch:
         # Initialize frontier with the root node
         frontier = PriorityQueueFrontier()
 
-         # Agregar nodo inicial con prioridad heurística
         h = GreedyBestFirstSearch.heuristic(root.state, grid.end)
         frontier.add(root, h)
 
         while not frontier.is_empty():
-            current = frontier.pop()
+            node = frontier.pop()
+            
+            if grid.objective_test(node.state):
+                return Solution(node, reached)
 
-            # Objetivo
-            if grid.objective_test(current.state):
-                return Solution(current, reached)
+            for action in grid.actions(node.state):
+                new_state = grid.result(node.state, action)
+                new_cost = node.cost + grid.individual_cost(node.state, action)
 
-            # Expandir
-            for action in grid.actions(current.state):
-                new_state = grid.result(current.state, action)
-                new_cost = current.cost + grid.individual_cost(current.state, action)
-
-                if new_state not in reached:
-                    child = Node(
+                if new_state not in reached or new_cost < reached[new_state]:
+                    new_node = Node(
                         "",
                         state=new_state,
                         cost=new_cost,
-                        parent=current,
+                        parent=node,
                         action=action
                     )
 
                     reached[new_state] = new_cost
-
-                    # CLAVE: solo heurística
+                    
                     h = GreedyBestFirstSearch.heuristic(new_state, grid.end)
-                    frontier.add(child, h)
+                    frontier.add(new_node, h)
 
         return NoSolution(reached)

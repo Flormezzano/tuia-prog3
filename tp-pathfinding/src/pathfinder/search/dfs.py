@@ -35,10 +35,16 @@ class DepthFirstSearch:
                 expanded[node.state]=True
 
             for action in grid.actions(node.state):
-                state = grid.result(node.state,action)
+                new_state = grid.result(node.state,action)
 
-                if state not in expanded:
-                    new_node = Node("",state,node.cost+grid.individual_cost(node.state,action), node, action)
+                if new_state not in expanded:
+                    new_node = Node(
+                        "", 
+                        state = new_state, 
+                        cost = node.cost + grid.individual_cost(node.state,action), 
+                        parent = node, 
+                        action = action)
+                        
                     if grid.objective_test(new_node.state):
                         return Solution(new_node,expanded)
                     frontier.add(new_node)

@@ -77,12 +77,12 @@ def estrategia_minimax(tateti: Tateti, estado: List[List[str]]) -> Tuple[int, in
         for action in acciones:
             new_state = tateti.resultado(estado, action)
             sucs[action] = minimax_min(tateti, new_state)
-        return min(sucs, key=lambda k: sucs[k])
+        return max(sucs, key=sucs.get)
     
     else:
         for action in acciones:
             new_state = tateti.resultado(estado, action)
             sucs[action] = minimax_max(tateti, new_state)
-        return min(sucs, key=lambda k: sucs[k])
+        return min(sucs, key=sucs.get)
 
 

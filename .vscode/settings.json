@@ -1,0 +1,12 @@
+{
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/tp-pathfinding",
+        "${workspaceFolder}/tp-tateti",
+        "${workspaceFolder}/tp-tsp"
+    ],
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/tp-pathfinding",
+        "${workspaceFolder}/tp-tateti",
+        "${workspaceFolder}/tp-tsp"
+    ]
+}

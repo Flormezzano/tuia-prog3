@@ -35,32 +35,28 @@ class AStarSearch:
         frontier.add(root, h)
 
         while not frontier.is_empty():
-            current = frontier.pop()
+            node = frontier.pop()
 
-            if grid.objective_test(current.state):
-                return Solution(current, reached)
+            if grid.objective_test(node.state):
+                return Solution(node, reached)
 
-            for action in grid.actions(current.state):
-                new_state = grid.result(current.state, action)
-                new_cost = current.cost + grid.individual_cost(current.state, action)
+            for action in grid.actions(node.state):
+                new_state = grid.result(node.state, action)
+                new_cost = node.cost + grid.individual_cost(node.state, action)
 
-                # A* sí reconsidera caminos mejores
                 if new_state not in reached or new_cost < reached[new_state]:
-                    child = Node(
-                        "",
-                        state=new_state,
-                        cost=new_cost,
-                        parent=current,
-                        action=action
-                    )
-
+                    new_node = Node(
+                        "", 
+                        state=new_state, 
+                        cost=new_cost, 
+                        parent=node, 
+                        action=action)
+                        
                     reached[new_state] = new_cost
-
                     h = AStarSearch.heuristic(new_state, grid.end)
-
-                    # CLAVE DE A*
+                    
                     priority = new_cost + h
 
-                    frontier.add(child, priority)
+                    frontier.add(new_node, priority)
 
         return NoSolution(reached)

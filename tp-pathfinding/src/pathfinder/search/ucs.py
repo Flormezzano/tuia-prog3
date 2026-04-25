@@ -35,10 +35,16 @@ class UniformCostSearch:
                 return Solution(node, reached)
             
             for action in grid.actions(node.state):
-                state = grid.result(node.state, action)
-                cost = node.cost + grid.individual_cost(node.state, action)
-                if state not in reached or cost < reached[state]:
-                    new_node = Node("",state,cost,node,action)
+                new_state = grid.result(node.state, action)
+                new_cost = node.cost + grid.individual_cost(node.state, action)
+                if new_state not in reached or new_cost < reached[new_state]:
+                    new_node = Node(
+                        "", 
+                        state = new_state,
+                        cost = new_cost, 
+                        parent = node, 
+                        action = action)
+                        
                     reached[new_node.state] = new_node.cost
                     frontier.add(new_node, new_node.cost)
 
